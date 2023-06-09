@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Script: Display Time
+
+hours=0
+
+while [ $hours -le 12 ]; do
+    printf "Hour: %d\n" $hours
+    minutes=1
+    while [ $minutes -le 59 ]; do
+        printf "%d\n" $minutes
+        ((minutes++))
+    done
+    ((hours++))
+done
+
