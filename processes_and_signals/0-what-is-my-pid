@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#This script display it's PID
+pid=$$
+echo "This script PID is $pid"
