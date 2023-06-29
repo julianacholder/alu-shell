@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #This script displays a list of currently running process
-ps_output=$(ps -ef --forest)
+ps_output=$(ps -aux --forest)
 echo "$ps_output"
