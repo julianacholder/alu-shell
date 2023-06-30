@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Function to write "I am alive!" to the file
+write_message() {
+    echo "I am alive!" >> /tmp/my_process
+}
+
+# Main script logic
+case "$1" in
+    start)
+        # Check if the process is already running
+        if [ -f "/var/run/my_process.pid" ]; then
+            echo "manage_my_process is already running."
+            exit 1
+        fi
+
+        # Start the process
+        nohup bash -c "while true; do write_message; sleep 2; done" >> /dev/null 2>&1 &
+        echo $! > /var/run/my_process.pid
+        echo "manage_my_process started."
+        ;;
+    stop)
+        # Check if the process is running
+        if [ -f "/var/run/my_process.pid" ]; then
+            # Get the process ID from the PID file
+            pid=$(cat /var/run/my_process.pid)
+            # Stop the process
+            kill $pid
+            # Delete the PID file
+            rm "/var/run/my_process.pid"
+            echo "manage_my_process stopped."
+        else
+            echo "manage_my_process is not running."
+            exit 1
+        fi
+        ;;
+    restart)
+        # Stop the process if running
+        if [ -f "/var/run/my_process.pid" ]; then
+            $0 stop
+        fi
+
+        # Start the process
+        $0 start
+        echo "manage_my_process restarted."
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
