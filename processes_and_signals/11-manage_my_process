@@ -1,21 +1,34 @@
 #!/usr/bin/env bash
 #manage
-case "$1" in
-    start)
-        # Start manage_my_process
-        ./manage_my_process start
-        ;;
-    stop)
-        # Stop manage_my_process
-        ./manage_my_process stop
-        ;;
-    restart)
-        # Restart manage_my_process
-        ./manage_my_process restart
-        ;;
-    *)
-        echo "Usage: $0 {start|stop|restart}"
-        exit 1
-        ;;
-esac
-
+start() {
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process started"
+}
+stop() {
+    sudo rm -f /var/run/my_process.pid &
+    sudo pkill -f manage_my_process &
+    echo "manage_my_process stopped"
+}
+restart() {
+    sudo pkill manage_my_process &
+    rm /var/run/my_process.pid &
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process restarted"
+}
+if [ $# -lt 1 ] || [ $# -ge 2 ]; then
+    echo "Usage: manage_my_process {start|stop|restart}"
+else
+    case $1 in
+	"start")
+	    start
+	    ;;
+	"stop")
+	    stop
+	    ;;
+	"restart")
+	    restart
+	    ;;
+    esac
+fi
