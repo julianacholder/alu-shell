@@ -1,23 +1,8 @@
 #!/usr/bin/env bash
 # Function to write "I am alive!" to the file
-killer() {
-    kill "$(pgrep -f /manage_my_process)"
-    rm -f /var/run/my_process.pid &
-}
 
-if [[ "$1" == "start" ]]
-then
-    ./manage_my_process &
-    echo "$!" > /var/run/my_process.pid
-    echo "manage_my_process started"
-elif [[ "$1" == "stop" ]]
-then
-    killer; echo "manage_my_process stopped";
-elif [[ "$1" == "restart" ]]
-then
-    killer; ./manage_my_process &
-    echo "$!" > /var/run/my_process.pid
-    echo "manage_my_process restarted"
-else
-    echo "Usage: manage_my_process {start|stop|restart}"
-fi
+while true; do
+  echo "I am alive!" >> /tmp/my_process
+  sleep 2
+done
+
